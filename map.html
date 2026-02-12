@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mappa Impianti da vte</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map { height: 600px; width: 100%; }
+  </style>
+</head>
+<body>
+  <h2>Mappa Impianti da vte</h2>
+  <div id="map"></div>
+  
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Inizializza mappa centrata su Brescia
+    var map = L.map('map').setView([45.5, 10.2], 10);
+
+    // Tile OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // URL del Worker
+    var workerURL = 'https://vte-mappa-interventi.dev-ilyass-cherif.workers.dev/';
+
+    // Prendi dati dal Worker
+    fetch(workerURL)
+      .then(response => response.json())
+      .then(data => {
+        data.features.forEach(i => {
+          var coords = i.geometry.coordinates;
+          var props = i.properties;
+          L.marker([coords[1], coords[0]])  // Leaflet usa [lat, lng]
+            .addTo(map)
+            .bindPopup(`<b>${props.codice}</b><br>${props.nome}`);
+        });
+      })
+      .catch(err => console.error("Errore fetch Worker:", err));
+  </script>
+</body>
+</html>
