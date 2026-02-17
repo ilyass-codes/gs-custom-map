@@ -20,7 +20,7 @@
       attribution: '&copy; OpenStreetMap'
     }).addTo(map);
   
-    fetch("https://TUO-WORKER.workers.dev")
+    fetch("https://vte-mappa-interventi.dev-ilyass-cherif.workers.dev")
       .then(res => res.json())
       .then(data => {
         L.geoJSON(data, {
@@ -39,3 +39,4 @@
 
 </body>
 </html>
+
